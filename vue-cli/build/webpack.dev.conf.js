@@ -2,45 +2,45 @@
 const utils = require('./utils')
 const webpack = require('webpack')
 const config = require('../config')
-const merge = require('webpack-merge')
+const merge = require('webpack-merge') // 合并对象插件
 const path = require('path')
 const baseWebpackConfig = require('./webpack.base.conf')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin') //拷贝资源插件
+const HtmlWebpackPlugin = require('html-webpack-plugin') //
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin') //
 const portfinder = require('portfinder')
 
-const HOST = process.env.HOST
-const PORT = process.env.PORT && Number(process.env.PORT)
+const HOST = process.env.HOST // 获取进程env 中的 ip地址（可能没有）
+const PORT = process.env.PORT && Number(process.env.PORT) // 获取进程env 中的 端口（可能没有）
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
-    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
+    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true }) // 为css预处理器配置相应的loader
   },
-  // cheap-module-eval-source-map is faster for development
+  // cheap-module-eval-source-map 对于开发环境来说是更快的。
   devtool: config.dev.devtool,
 
   // these devServer options should be customized in /config/index.js
   devServer: {
-    clientLogLevel: 'warning',
-    historyApiFallback: {
+    clientLogLevel: 'warning', // 控制台显示bundle 的警告
+    historyApiFallback: { //当使用 HTML5 History API 时，任意的 404 响应都可能需要被替代为 index.html。
       rewrites: [
         { from: /.*/, to: path.posix.join(config.dev.assetsPublicPath, 'index.html') },
       ],
     },
-    hot: true,
-    contentBase: false, // since we use CopyWebpackPlugin.
-    compress: true,
+    hot: true, // 是否启用 webpack 的模块热替换特性
+    contentBase: false, // since we use CopyWebpackPlugin. 告诉服务器从哪里提供内容
+    compress: true, // 一切服务都启用gzip 压缩
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
-    open: config.dev.autoOpenBrowser,
-    overlay: config.dev.errorOverlay
+    open: config.dev.autoOpenBrowser, // 是否自动打开浏览器
+    overlay: config.dev.errorOverlay  //当出现编译错误或警告时，在浏览器中显示全屏覆盖。默认情况下禁用。如果您只想显示编译器错误:
       ? { warnings: false, errors: true }
       : false,
-    publicPath: config.dev.assetsPublicPath,
-    proxy: config.dev.proxyTable,
-    quiet: true, // necessary for FriendlyErrorsPlugin
-    watchOptions: {
+    publicPath: config.dev.assetsPublicPath, //此路径下的打包文件可在浏览器中访问
+    proxy: config.dev.proxyTable, // 代理设置
+    quiet: true, // necessary for FriendlyErrorsPlugin 启用 quiet 后，除了初始启动信息之外的任何内容都不会被打印到控制台。这也意味着来自 webpack 的错误或警告在控制台不可见。
+    watchOptions: { //与监视文件相关的控制选项
       poll: config.dev.poll,
     }
   },

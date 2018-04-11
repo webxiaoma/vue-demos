@@ -14,11 +14,10 @@
 ```
 
 |-- build                            // 项目构建(webpack以及简易node服务)相关代码
-|   |-- build.js                     // 生产环境构建代码
+|   |-- build.js                     // 生产环境构建代码 （执行npm run build 时，执行此文件）
 |   |-- check-version.js             // 检查node、npm等版本
-|   |-- dev-client.js                // 热重载相关
-|   |-- dev-server.js                // 构建本地服务器
-|   |-- utils.js                     // 构建工具相关
+|   |-- utils.js                     // 主要处理一些css相关的loader
+|   |-- vue-loader.config.js         // vue-loader 的配置项设置（utils 中的一些配置，也是在这里传进去的）
 |   |-- webpack.base.conf.js         // webpack基础配置
 |   |-- webpack.dev.conf.js          // webpack开发环境配置
 |   |-- webpack.prod.conf.js         // webpack生产环境配置

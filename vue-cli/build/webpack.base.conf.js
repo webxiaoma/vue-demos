@@ -4,11 +4,11 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
-function resolve (dir) {
+function resolve (dir) { // 设置构建根基目录下某个文件夹的路径
   return path.join(__dirname, '..', dir)
 }
 
-const createLintingRule = () => ({
+const createLintingRule = () => ({ // 设置对src 和 test 目录下的js和vue文件的eslint 检查
   test: /\.(js|vue)$/,
   loader: 'eslint-loader',
   enforce: 'pre',
@@ -20,11 +20,11 @@ const createLintingRule = () => ({
 })
 
 module.exports = {
-  context: path.resolve(__dirname, '../'),
-  entry: {
+  context: path.resolve(__dirname, '../'), // 根目录
+  entry: { // wepback 入口文件
     app: './src/main.js'
   },
-  output: {
+  output: { // 出口文件
     path: config.build.assetsRoot,
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
@@ -32,15 +32,15 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
-    alias: {
+    extensions: ['.js', '.vue', '.json'], // 自动补全扩展名
+    alias: { // 设置默认路径，如 import vue from vue$ ,会自动找到 vue/dist/vue.esm.js
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
     }
   },
   module: {
     rules: [
-      ...(config.dev.useEslint ? [createLintingRule()] : []),
+      ...(config.dev.useEslint ? [createLintingRule()] : []), // 是否使用eslint
       {
         test: /\.vue$/,
         loader: 'vue-loader',
@@ -55,7 +55,7 @@ module.exports = {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
-          limit: 10000,
+          limit: 10000, // 将图片转化为base64格式的限制条件()
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
         }
       },
@@ -80,9 +80,13 @@ module.exports = {
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
     // source contains it (although only uses it if it's native).
+    //防止webpack注入无用的setimpolyfill，因为Vue。
+    //源包含它(尽管只在本机使用时使用)。
     setImmediate: false,
     // prevent webpack from injecting mocks to Node native modules
     // that does not make sense for the client
+    //防止webpack向节点本地模块注入模拟。
+    //这对客户来说毫无意义
     dgram: 'empty',
     fs: 'empty',
     net: 'empty',
