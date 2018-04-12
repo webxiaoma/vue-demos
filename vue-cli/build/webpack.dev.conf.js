@@ -5,10 +5,10 @@ const config = require('../config')
 const merge = require('webpack-merge') // 合并对象插件
 const path = require('path')
 const baseWebpackConfig = require('./webpack.base.conf')
-const CopyWebpackPlugin = require('copy-webpack-plugin') //拷贝资源插件
-const HtmlWebpackPlugin = require('html-webpack-plugin') //
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin') //
-const portfinder = require('portfinder')
+const CopyWebpackPlugin = require('copy-webpack-plugin') //拷贝资源插件 https://www.npmjs.com/package/copy-webpack-plugin
+const HtmlWebpackPlugin = require('html-webpack-plugin') // 该插件将为您生成一个HTML5文件  http://www.css88.com/doc/webpack/plugins/html-webpack-plugin/
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin') // 能够更好在终端看到webapck运行的警告和错误 http://npm.taobao.org/package/friendly-errors-webpack-plugin
+const portfinder = require('portfinder') //一个自动检索端口的包 http://npm.taobao.org/package/portfinder
 
 const HOST = process.env.HOST // 获取进程env 中的 ip地址（可能没有）
 const PORT = process.env.PORT && Number(process.env.PORT) // 获取进程env 中的 端口（可能没有）
@@ -44,21 +44,21 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       poll: config.dev.poll,
     }
   },
-  plugins: [
-    new webpack.DefinePlugin({
+  plugins: [ // 插件的使用
+    new webpack.DefinePlugin({ // 允许创建一个在编译时可以配置的全局常量插件 http://www.css88.com/doc/webpack/plugins/define-plugin/
       'process.env': require('../config/dev.env')
     }),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
-    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.HotModuleReplacementPlugin(), //启用热替换模块(Hot Module Replacement) http://www.css88.com/doc/webpack/plugins/hot-module-replacement-plugin/
+    new webpack.NamedModulesPlugin(), // 当开启 HMR 的时候使用该插件会显示模块的相对路径  HMR shows correct file names in console on update.
+    new webpack.NoEmitOnErrorsPlugin(), // 在编译出现错误时，使用 NoEmitOnErrorsPlugin 来跳过输出阶段，不会阻塞编译，在编译结束后报错。这样可以确保输出资源不会包含错误。
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
-      inject: true
+      inject: true   // 为true时，所有javascript资源都将放置在body元素的底部。'head'将脚本放置在head元素中
     }),
     // copy custom static assets
-    new CopyWebpackPlugin([
+    new CopyWebpackPlugin([ // 将静态文件复制到构建出的目录里
       {
         from: path.resolve(__dirname, '../static'),
         to: config.dev.assetsSubDirectory,
@@ -74,9 +74,9 @@ module.exports = new Promise((resolve, reject) => {
     if (err) {
       reject(err)
     } else {
-      // publish the new Port, necessary for e2e tests
+      // 发布e2e测试所需的新端口。 publish the new Port, necessary for e2e tests
       process.env.PORT = port
-      // add port to devServer config
+      // 添加端口到devServer配置。 add port to devServer config
       devWebpackConfig.devServer.port = port
 
       // Add FriendlyErrorsPlugin

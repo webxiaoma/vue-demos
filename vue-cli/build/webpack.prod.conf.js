@@ -7,9 +7,9 @@ const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin') // 独立打包css样式
+const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin') //css  压缩插件
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin') // js压缩代码插件
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -31,20 +31,20 @@ const webpackConfig = merge(baseWebpackConfig, {
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
-    new webpack.DefinePlugin({
+    new webpack.DefinePlugin({ //允许创建一个在编译时可以配置的全局常量
       'process.env': env
     }),
-    new UglifyJsPlugin({
+    new UglifyJsPlugin({   //压缩插件 https://segmentfault.com/a/1190000010874406
       uglifyOptions: {
-        compress: {
+        compress: { // 压缩
           warnings: false
         }
       },
-      sourceMap: config.build.productionSourceMap,
+      sourceMap: config.build.productionSourceMap, //编译后代码对源码的映射，用于网页调试
       parallel: true
     }),
-    // extract css into its own file
-    new ExtractTextPlugin({
+    // 将css提取到它自己的文件中。extract css into its own file
+    new ExtractTextPlugin({ // 抽了css样式
       filename: utils.assetsPath('css/[name].[contenthash].css'),
       // Setting the following option to `false` will not extract CSS from codesplit chunks.
       // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.

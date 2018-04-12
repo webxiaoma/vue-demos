@@ -29,10 +29,11 @@
 |-- src                              // 源码目录
 |   |-- components                   // vue公共组件
 |   |-- store                        // vuex的状态管理
+|   |-- router                       // 路由文件
 |   |-- App.vue                      // 页面入口文件
 |   |-- main.js                      // 程序入口文件，加载各种公共组件
 |-- static                           // 静态文件，比如一些不需要编译的图片、font字体、json数据等
-|-- test
+|-- test                             // 关于测试的文件
 |-- .babelrc                         // ES6语法编译配置
 |-- .editorconfig                    // 定义和维护一致的编码风格 1
 |-- .eslintignore                    // 设置那些文件忽略eslint 代码检测 2

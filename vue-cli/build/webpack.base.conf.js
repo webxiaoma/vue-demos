@@ -55,7 +55,7 @@ module.exports = {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
-          limit: 10000, // 将图片转化为base64格式的限制条件()
+          limit: 10000, // 小于10000字节 将图片转化为base64格式的限制条件()
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
         }
       },
