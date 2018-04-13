@@ -1,7 +1,7 @@
 <template>
-  <div class='header'>
-     <div class='header-center'>
-
+  <div class='headerWrap'>
+     <div class='headerCenter'>
+         头部
      </div>
   </div>
 </template>
@@ -15,11 +15,11 @@ export default {
 <style lang="less" scoped>
 @import url("../../theme/base.less");
 
-.header{
+.headerWrap{
   display:flex;
   justify-content:center;
-  background:#fff;
-  .header-center{
+  background:red;
+  .headerCenter{
     width:1200px;
     height:80px;
 

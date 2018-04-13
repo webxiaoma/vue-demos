@@ -50,3 +50,26 @@
 
 1. 关于`editorconfig`的一些东西 [官网](http://editorconfig.org/)    [文章](https://www.cnblogs.com/xiaohuochai/p/7160067.html)
 2. 关于eslint的一些东西 [官网](http://eslint.cn/docs/rules/)  [相关文章](http://cnodejs.org/topic/57c68052b4a3bca66bbddbdd)
+
+
+
+### src 目录说明
+
+src目录中我添加了一些自己写项目时唱搭建的目录结构
+
+```
+|-- src                              // 源码目录
+|   |-- api                          // api请求接口目录（里面apis 存储所有api接口，还可以对应页面建目录，来写api请求）
+|   |   |--apis                      // 存储所有api接口
+|   |-- components                   // vue公共组件
+|   |   |-- layout                   // 存放页面整体结构目录（例如头部，尾部，客服浮动框）
+|   |   |-- Home.vue                 // 网站首页
+|   |   |-- Main.vue                 // 网站整体构架的搭建
+|   |-- store                        // vuex的状态管理
+|   |-- router                       // 路由文件
+|   |-- theme                        // 存放一些公共主题样式，比如页面的主色调，副色调，hover色调，按钮色调
+|   |-- utils                        // 针对项目对异步请求的一些封装目录（我这里对axios进行了简单的封装）
+|   |-- App.vue                      // 页面入口文件
+|   |-- main.js                      // 程序入口文件，加载各种公共组件
+
+```

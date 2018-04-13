@@ -1,13 +1,13 @@
 <template>
    <div class="loayoutWarp">
         <div class="header">
-
+            <header-layout></header-layout>
         </div>
         <div class="body">
-          <!-- <router-view></router-view> -->
+          <router-view></router-view>
         </div>
         <div class="footer" >
-
+           <footer-layout></footer-layout>
         </div>
    </div>
 </template>
@@ -21,33 +21,17 @@ export default {
  name: 'Main',
  data(){
    return{
-      position:{
-          right:'20px'
-      },
-      floatMsg:'隐藏'
+
    }
  },
  created(){
-   let name = this.$route.meta.title;
-   if(name !== "登录"){
-       this.isHeader = true;
-   }else{
-       this.isHeader = false;
-   }
+
  },
  computed:{
-   ...mapState(['isHeaderBlogroll']),
+
  },
  methods:{
-   floatShow(){
-      if(parseInt(this.position.right) == 20){
-         this.position.right = '-172px';
-         this.floatMsg = '显示';
-      }else{
-           this.position.right = '20px';
-           this.floatMsg = '隐藏';
-      }
-   }
+
  },
  components:{
      HeaderLayout,
@@ -64,7 +48,7 @@ export default {
     .header{
 
     }
-    .content{
+    .body{
 
     }
     .footer{
