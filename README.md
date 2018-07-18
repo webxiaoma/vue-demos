@@ -1,6 +1,7 @@
-# vue-demos vue 练习
+# vue 日常学习
 
-### vue-cli目录
+### 目录
 
-- vue-cli 目录是对vue-cli脚手架的分析。
+1. [vue-cli脚手架的认识与分析 vue版本2.5.2]()
+
 
