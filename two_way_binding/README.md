@@ -1,6 +1,6 @@
-# vue-demos vue 练习
+# vue的双向绑定
 
-### vue-cli目录
 
-- vue-cli 目录是对vue-cli脚手架的分析。
+### 一、推荐文章
 
+1. [vue的双向绑定原理及实现](http://www.cnblogs.com/libin-1/p/6893712.html)
