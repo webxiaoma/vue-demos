@@ -11,15 +11,14 @@ function defineReactive(data,key,val){
             if(val === newVal){
                 return 
             }
-
-          val = newVal
-          dep.notify(); 
+            val = newVal
+            dep.notify(); 
        },
        get(){
            if(Dep.target){
                dep.addSub(Dep.target)
            }
-           return val
+           return val 
        }
     })
    
@@ -30,8 +29,8 @@ function observe(data){
       return
   }
   Object.keys(data).forEach(key=>{
-    defineReactive(dat,key,data[key])
-  })
+    defineReactive(data,key,data[key])
+  }) 
 }
 
 
@@ -43,7 +42,7 @@ function observe(data){
 */ 
 
 function Dep(){
-    this.subs = [];
+    this.subs = []; // 存储Watcher
 }
 
 Dep.prototype = {
@@ -51,8 +50,8 @@ Dep.prototype = {
        this.subs.push(sub)
     },
     notify(){
-       this.subs.forEach(sub=>{
-           sub.updata();
+       this.subs.forEach(watch=>{
+          watch.updata();
        })
     }
 }
@@ -77,10 +76,10 @@ Watcher.prototype = {
         this.run();
     },
     run(){
-        let value = this.vm.data[this.key]
-        let oldVal = this.value
+        let value = this.vm.data[this.key] //获取变化后的属性值
+        let oldVal = this.value // 获取旧属性值
         if(value !== oldVal){
-            
+            this.callback(value)
         }
     },
     get(){
@@ -94,12 +93,8 @@ Watcher.prototype = {
 
 
 
-
-
-
-
 /*
-Compile 的实现 以下几个功能
+Compile(模板编译) 的实现 以下几个功能
 
 1.解析模板指令，并替换模板数据，初始化视图
 
@@ -108,20 +103,47 @@ Compile 的实现 以下几个功能
 
 */ 
 
-function   nodeToFragment(el){  // 建一个fragment片段，将需要解析的dom节点存入fragment片段里再进行处理(提高性能)
-    let fragment = document.createDocumentFragment();
-    let child  = el.firstElementChild
-
-    while(child){
-        fragment.appendChild(child)
-        child = el.firstChild
+function Compile(node,vm){ 
+    if(node){
+        this.$frag = this.nodeToFragment(node)
     }
-
-    return fragment;
+    
+    return this.$frag
 
 }
 
-let root = document.getElementById("root")
+Compile.prototype = {
+    nodeToFragment(node){  //建一个fragment片段，将需要解析的dom节点存入fragment片段里再进行处理(提高性能)
+        let fragment = document.createDocumentFragment();
+        let child  = node.firstElementChild
+        while(child){
+            fragment.appendChild(child)
+            this.compileElement(child)
+            child = node.firstElementChild
+        }
+    
+        return fragment;
+    },
+    compileElement(node){ // 编译解析模板
+        let reg = /\{\{(.*)\}\}/;
+
+        if(node.nodeType ===  1){ // 节点类型为元素类型
+
+        }
+
+
+        if(node.nodeType === 3){ // 节点类型为文本text类型
+            if(reg.test(node.nodeValue)){
+                console.log(node)
+            }
+
+        }
+
+    },
+    compileText(){ // 将数据初始化，并生成订阅器（订阅者）
+
+    }
+}
 
 
 function compileElement(el){
@@ -129,7 +151,6 @@ function compileElement(el){
     Array.prototype.slice.call(childNodes).forEach(node=>{
          let reg = /\{\{(.*)\}\}/;
          var text = node.textContent
-         console.log(node.childNodes)
  
          if(node.nodeType ===1 && reg.test(text)){
 
@@ -142,14 +163,47 @@ function compileElement(el){
 }
 
 
-compileElement(nodeToFragment(root))
 
 
 
-/**
- * 
- * 
- * 接下来我们要讲Observe 数据监听器和 Watcher 订阅者关联起来
- */
+/*
+将订阅者Watcher 和 数据监听器Observer 进行关联
+*/ 
+
+function SelfVue (obj){
+    this.data = obj.data
+    let el = document.querySelector(obj.el)
+    this.$el = el
+    Object.keys(obj.data).forEach(key=>{
+        this.proxyDataKeys(key)
+    })
+    observe(obj.data)
+
+    new Compile(el,this)
+    // new Watcher(this,"name",(value)=>{
+    //     el.innerHTML = value
+    // })
+
+    return this
+
+}
+
+
+SelfVue.prototype =  { // 将SelfVue实例data属性上的数据绑定到SelfVue实例上
+     proxyDataKeys(key){
+        let self = this;
+        Object.defineProperty(this,key,{
+            enumerable:true,
+            configurable:true,
+            get(){
+              return self.data[key]
+            },
+            set(newVal){
+              self.data[key] = newVal
+            }
+
+        })
+     }
+}
 
 

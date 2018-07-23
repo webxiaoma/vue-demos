@@ -6,4 +6,4 @@
 
 2. [vue的双向绑定原理](https://github.com/webxiaoma/vue-demos/tree/master/two_way_binding)
 
-
+3. [vue的源码](https://github.com/webxiaoma/vue-demos/tree/master/vue)
