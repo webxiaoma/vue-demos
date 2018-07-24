@@ -9,6 +9,7 @@
 <body>
     <div id="app">11122</div>
     <div id="root">
+       {{name}}
        <div>{{1111}}
            <p>{{adds}}</p>
        </div>
@@ -20,9 +21,7 @@
     </div>
 
     <script src="./demo.js"></script>
-
     <script>
-        
         let selfVue = new SelfVue({
             el:"#root",
             data:{
@@ -33,10 +32,10 @@
         // console.log(selfVue)
         // console.log(selfVue.name)
 
-        setTimeout(()=>{
-            selfVue.name = "我变化了"
-        },2000)
-    
+        // setTimeout(()=>{
+        //     selfVue.name = "我变化了"
+        // },2000)
+        
     </script>
 
 </body>

@@ -103,30 +103,30 @@ Compile(模板编译) 的实现 以下几个功能
 
 */ 
 
-function Compile(node,vm){ 
-    if(node){
-        this.$frag = this.nodeToFragment(node)
+function Compile(el,vm){ 
+    this.vm = vm;
+    this.el = el
+    if(el){
+        this.$frag = this.nodeToFragment(el)
     }
-    
-    return this.$frag
+    return this.$frag;
 
 }
 
 Compile.prototype = {
     nodeToFragment(node){  //建一个fragment片段，将需要解析的dom节点存入fragment片段里再进行处理(提高性能)
         let fragment = document.createDocumentFragment();
-        let child  = node.firstElementChild
+        let child  = node.firstChild
         while(child){
             fragment.appendChild(child)
             this.compileElement(child)
-            child = node.firstElementChild
+            child = node.firstChild
         }
     
         return fragment;
     },
     compileElement(node){ // 编译解析模板
         let reg = /\{\{(.*)\}\}/;
-
         if(node.nodeType ===  1){ // 节点类型为元素类型
 
         }
@@ -134,14 +134,25 @@ Compile.prototype = {
 
         if(node.nodeType === 3){ // 节点类型为文本text类型
             if(reg.test(node.nodeValue)){
-                console.log(node)
+                // console.log(reg.exec(node.nodeValue)[1])
+
+                this.compileText(node,reg.exec(node.nodeValue)[1])
             }
 
         }
 
     },
-    compileText(){ // 将数据初始化，并生成订阅器（订阅者）
-
+    compileText(node,exp){ // 将数据初始化，并生成订阅器（订阅者）
+        // console.log(this.vm)
+        this.updateView(node,this.vm[exp])
+        new Watcher(this.vm,exp,(value)=>{
+            node.nodeValue = value
+            this.updateView(node,value)
+        })
+        
+    },
+    updateView(node,value){ // 更新视图
+        node.textContent = typeof value == 'undefined' ? '' : value;
     }
 }
 
@@ -178,11 +189,9 @@ function SelfVue (obj){
         this.proxyDataKeys(key)
     })
     observe(obj.data)
+    let vueElement = new Compile(el,this)
 
-    new Compile(el,this)
-    // new Watcher(this,"name",(value)=>{
-    //     el.innerHTML = value
-    // })
+    el.appendChild(vueElement)
 
     return this
 
