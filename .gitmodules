@@ -1,0 +1,3 @@
+[submodule "docs/vue"]
+	path = docs/vue
+	url = git@git.kancloud.cn:webxiaoma/vue.git

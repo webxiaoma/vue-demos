@@ -60,6 +60,10 @@ Dep.prototype = {
 
 /*
 创建订阅者 Watcher
+Watcher订阅者作为Observer和Compile之间通信的桥梁，主要做的事情是: 
+1、在自身实例化时往属性订阅器(dep)里面添加自己 
+2、自身必须有一个update()方法 
+3、待属性变动dep.notice()通知时，能调用自身的update()方法，并触发Compile中绑定的回调，则功成身退。 
 
 */ 
 
@@ -107,8 +111,10 @@ function Compile(el,vm){
     this.vm = vm;
     this.el = el
     if(el){
-        this.$frag = this.nodeToFragment(el)
+      this.$frag = this.nodeToFragment(el) // 将DOM节点转换为fragment 虚拟节点
+      this.compileElement(this.$frag)  // 编译解析模板
     }
+    el.appendChild(this.$frag)
     return this.$frag;
 
 }
@@ -119,34 +125,26 @@ Compile.prototype = {
         let child  = node.firstChild
         while(child){
             fragment.appendChild(child)
-            this.compileElement(child)
             child = node.firstChild
         }
-    
+
         return fragment;
     },
-    compileElement(node){ // 编译解析模板
+    compileElement(elFrag){ // 编译解析模板
         let reg = /\{\{(.*)\}\}/;
-        if(node.nodeType ===  1){ // 节点类型为元素类型
+        [].slice.call(elFrag.childNodes).forEach((node)=>{
+            if(node.nodeType === 3){ // 节点类型为文本text类型
+                if(reg.test(node.nodeValue)){
+                    this.compileText(node,reg.exec(node.nodeValue)[1])
+                }
 
-        }
-
-
-        if(node.nodeType === 3){ // 节点类型为文本text类型
-            if(reg.test(node.nodeValue)){
-                // console.log(reg.exec(node.nodeValue)[1])
-
-                this.compileText(node,reg.exec(node.nodeValue)[1])
             }
-
-        }
-
+        })
+      
     },
     compileText(node,exp){ // 将数据初始化，并生成订阅器（订阅者）
-        // console.log(this.vm)
         this.updateView(node,this.vm[exp])
         new Watcher(this.vm,exp,(value)=>{
-            node.nodeValue = value
             this.updateView(node,value)
         })
         
@@ -157,29 +155,9 @@ Compile.prototype = {
 }
 
 
-function compileElement(el){
-    let childNodes = el.childNodes
-    Array.prototype.slice.call(childNodes).forEach(node=>{
-         let reg = /\{\{(.*)\}\}/;
-         var text = node.textContent
- 
-         if(node.nodeType ===1 && reg.test(text)){
-
-         }
-
-         if(node.childNodes && node.childNodes.length){
-            compileElement(node)
-         }
-    })
-}
 
 
-
-
-
-/*
-将订阅者Watcher 和 数据监听器Observer 进行关联
-*/ 
+// 暴露接口，以及配置，初始化所有功能 （入口方法）
 
 function SelfVue (obj){
     this.data = obj.data
@@ -189,9 +167,7 @@ function SelfVue (obj){
         this.proxyDataKeys(key)
     })
     observe(obj.data)
-    let vueElement = new Compile(el,this)
-
-    el.appendChild(vueElement)
+    new Compile(el,this)
 
     return this
 
