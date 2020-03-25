@@ -1,0 +1,19 @@
+{
+  "name": "node-docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx vuepress dev .",
+    "build": "npx vuepress build ."
+  },
+  "keywords": [
+    "webxiaoma"
+  ],
+  "author": "webxiaoma",
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.0.2"
+  }
+}
+  
